@@ -7,9 +7,6 @@ test -n "$SMTP_HOST"
 test -n "$SMTP_PORT"
 test -n "$SMTP_USER"
 test -n "$SMTP_TOKEN"
-# test -n "$MARIADB_USER"
-# test -n "$MARIADB_PASSWORD"
-# test -n "$MARIADB_DATABASE"
 test -n "$REGO_DB_CONNECT_STRING"
 
 # Get directory of script.
