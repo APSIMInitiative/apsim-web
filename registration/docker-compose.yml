@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  website:
+    image: apsiminitiative/registration-site:latest
+    container_name: registration-site
+    restart: unless-stopped
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+      - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_TOKEN=${SMTP_TOKEN}
+    networks:
+      - registration_httpd
+      - registration_db
+  db:
+    image: mariadb:10
+    container_name: registration-db
+    restart: unless-stopped
+    networks:
+      - registration_db
+    volumes:
+      - /data/registration/db:/var/lib/mysql
+networks:
+  registration_db:
+    name: registration_db
+  registration_httpd:
+    name: registration_httpd

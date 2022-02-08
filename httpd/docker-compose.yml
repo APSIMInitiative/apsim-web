@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  httpd:
+    image: httpd:apsim
+    container_name: httpd
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+    networks:
+      - registration_httpd
+networks:
+  registration_httpd:
+    external: true
