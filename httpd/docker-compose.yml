@@ -12,6 +12,9 @@ services:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
     networks:
       - registration_httpd
+      - jenkins_httpd
 networks:
   registration_httpd:
+    external: true
+  jenkins_httpd:
     external: true
