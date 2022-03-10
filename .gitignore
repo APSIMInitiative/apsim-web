@@ -1,3 +1,4 @@
 httpd/.certs
-registration/.prod
-registration/.debug
+.prod
+.debug
+

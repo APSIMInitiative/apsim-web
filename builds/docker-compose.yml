@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  website:
+    image: apsiminitiative/apsim-builds:latest
+    container_name: apsim-builds
+    restart: unless-stopped
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+      - JENKINS_URL=${JENKINS_URL}
+      - JENKINS_TOKEN_NG=${JENKINS_TOKEN_NG}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - HMAC_SECRET_KEY=${HMAC_SECRET_KEY}
+      - DOCUMENTATION_PATH=${DOCUMENTATION_PATH}
+      - NG_DB_CONNECTION_STRING=${NG_DB_CONNECTION_STRING}
+      - OLD_DB_CONNECTION_STRING=${OLD_DB_CONNECTION_STRING}
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - builds_httpd
+      - builds_db
+  db:
+    image: mariadb:10
+    container_name: builds-db
+    restart: unless-stopped
+    networks:
+      - builds_db
+    volumes:
+      - /data/builds/db:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD}
+networks:
+  builds_db:
+    name: builds_db
+  builds_httpd:
+    name: builds_httpd
