@@ -9,6 +9,7 @@ test -n "$JENKINS_TOKEN_NG"
 test -n "$JWT_SECRET_KEY"
 test -n "$HMAC_SECRET_KEY"
 test -n "$DOCUMENTATION_PATH"
+test -n "$INSTALLERS_PATH"
 test -n "$NG_DB_CONNECTION_STRING"
 test -n "$OLD_DB_CONNECTION_STRING"
 test -n "$MARIADB_PASSWORD"
@@ -17,7 +18,7 @@ test -n "$MARIADB_PASSWORD"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Rebuild docker image.
-docker build -f "$DIR/Dockerfile" -t apsiminitiative/apsim-builds:latest "$DIR"
+docker build --no-cache -f "$DIR/Dockerfile" -t apsiminitiative/apsim-builds:latest "$DIR"
 
 # Restart the container with the rebuilt image, ignoring any errors while
 # stopping the running container.

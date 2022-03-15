@@ -11,10 +11,14 @@ services:
       - JENKINS_TOKEN_NG=${JENKINS_TOKEN_NG}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - HMAC_SECRET_KEY=${HMAC_SECRET_KEY}
-      - DOCUMENTATION_PATH=${DOCUMENTATION_PATH}
+      - DOCUMENTATION_PATH=/var/builds/docs
+      - INSTALLERS_PATH=/var/builds/installers
       - NG_DB_CONNECTION_STRING=${NG_DB_CONNECTION_STRING}
       - OLD_DB_CONNECTION_STRING=${OLD_DB_CONNECTION_STRING}
       - ASPNETCORE_ENVIRONMENT=Production
+    volumes:
+      - ${DOCUMENTATION_PATH}:/var/builds/docs
+      - ${INSTALLERS_PATH}:/var/builds/installers
     networks:
       - builds_httpd
       - builds_db
