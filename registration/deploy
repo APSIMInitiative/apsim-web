@@ -13,7 +13,7 @@ test -n "$REGO_DB_CONNECT_STRING"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Rebuild docker image.
-docker build -f "$DIR/Dockerfile" -t apsiminitiative/registration-site:latest "$DIR"
+docker build --no-cache -f "$DIR/Dockerfile" -t apsiminitiative/registration-site:latest "$DIR"
 
 # Restart the container with the rebuild image, ignoring any errors while
 # stopping the running container.
