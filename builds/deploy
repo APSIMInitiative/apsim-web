@@ -13,6 +13,7 @@ test -n "$INSTALLERS_PATH"
 test -n "$NG_DB_CONNECTION_STRING"
 test -n "$OLD_DB_CONNECTION_STRING"
 test -n "$MARIADB_PASSWORD"
+test -n "$GITHUB_PAT"
 
 # Get directory of script.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
