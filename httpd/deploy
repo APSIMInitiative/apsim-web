@@ -6,7 +6,7 @@ set -euo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Rebuild docker image.
-docker build -f "$DIR/Dockerfile" -t httpd:apsim "$DIR"
+docker build --no-cache -f "$DIR/Dockerfile" -t httpd:apsim "$DIR"
 
 # Restart the container with the rebuild image, ignoring any errors while
 # stopping the running container.
