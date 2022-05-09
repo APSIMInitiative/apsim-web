@@ -14,10 +14,13 @@ services:
       - registration_httpd
       - jenkins_httpd
       - builds_httpd
+      - vault_httpd
 networks:
   registration_httpd:
     external: true
   jenkins_httpd:
     external: true
   builds_httpd:
+    external: true
+  vault_httpd:
     external: true

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vault
+    restart: unless-stopped
+    environment:
+      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+      - ROCKET_PORT=8123
+      - SIGNUPS_ALLOWED=false
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+    volumes:
+      - /data/vault:/data
+    networks:
+      - vault_httpd
+networks:
+  vault_httpd:
+    name: vault_httpd
