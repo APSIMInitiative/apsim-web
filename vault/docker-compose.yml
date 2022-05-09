@@ -9,7 +9,7 @@ services:
       - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
       - ROCKET_PORT=8123
       - SIGNUPS_ALLOWED=false
-      - ADMIN_TOKEN=${ADMIN_TOKEN}
+      # - ADMIN_TOKEN=${ADMIN_TOKEN}
     volumes:
       - /data/vault:/data
     networks:
