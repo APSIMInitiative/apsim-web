@@ -2,9 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 
 # Clone and build the website.
-#RUN git clone --depth 1 https://github.com/APSIMInitiative/APSIM.Builds /APSIM.Builds
-#RUN cd /APSIM.Builds/src/APSIM.Builds && dotnet publish -c Release -f net6.0 -r linux-x64 --no-self-contained
-RUN git clone --depth 1 --branch refactor https://github.com/hol430/APSIM.Builds /APSIM.Builds
+RUN git clone --depth 1 https://github.com/APSIMInitiative/APSIM.Builds /APSIM.Builds
 RUN cd /APSIM.Builds/src/APSIM.Builds && dotnet publish -c Release -f net6.0 -r linux-x64 --no-self-contained
 
 # Actual container is based on dotnet/aspnet, and doesn't include build tools.
