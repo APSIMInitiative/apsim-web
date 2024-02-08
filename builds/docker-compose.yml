@@ -9,6 +9,7 @@ services:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
       - JENKINS_URL=${JENKINS_URL}
       - JENKINS_TOKEN_NG=${JENKINS_TOKEN_NG}
+      - JENKINS_TOKEN_CLASSIC=${JENKINS_TOKEN_CLASSIC}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - HMAC_SECRET_KEY=${HMAC_SECRET_KEY}
       - DOCUMENTATION_PATH=/var/builds/docs
