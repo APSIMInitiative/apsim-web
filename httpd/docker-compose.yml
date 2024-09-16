@@ -15,6 +15,7 @@ services:
       - jenkins_httpd
       - builds_httpd
       - vault_httpd
+      - postats_httpd
 networks:
   registration_httpd:
     external: true
@@ -23,4 +24,6 @@ networks:
   builds_httpd:
     external: true
   vault_httpd:
+    external: true
+  postats_httpd:
     external: true
