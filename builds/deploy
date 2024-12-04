@@ -6,6 +6,7 @@ set -euo pipefail
 # Ensure the required environment variables are set.
 test -n "$JENKINS_URL"
 test -n "$JENKINS_TOKEN_NG"
+test -n "$JENKINS_TOKEN_CLASSIC"
 test -n "$JWT_SECRET_KEY"
 test -n "$HMAC_SECRET_KEY"
 test -n "$DOCUMENTATION_PATH"
