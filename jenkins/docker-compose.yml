@@ -5,10 +5,12 @@ services:
     image: jenkins/jenkins:lts-jdk11
     container_name: jenkins
     restart: unless-stopped
-    networks:
-      - jenkins_httpd
+
     volumes:
       - /data/jenkins:/var/jenkins_home
+    networks:
+      - apsim
+
 networks:
-  jenkins_httpd:
-    name: jenkins_httpd
+  apsim:
+    external: true

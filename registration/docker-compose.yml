@@ -14,18 +14,15 @@ services:
       - SMTP_TOKEN=${SMTP_TOKEN}
       - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
     networks:
-      - registration_httpd
-      - registration_db
+      - apsim
   db:
     image: mariadb:10
     container_name: registration-db
     restart: unless-stopped
     networks:
-      - registration_db
+      - apsim
     volumes:
       - /data/registration/db:/var/lib/mysql
 networks:
-  registration_db:
-    name: registration_db
-  registration_httpd:
-    name: registration_httpd
+  apsim:
+    external: true
