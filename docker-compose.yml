@@ -1,0 +1,229 @@
+# Top level docker compose
+
+services:
+  apsim-builds:
+    image: apsiminitiative/apsim-builds:latest
+    pull_policy: always
+    container_name: apsim-builds
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+      - JENKINS_URL=${JENKINS_URL}
+      - JENKINS_TOKEN_NG=${JENKINS_TOKEN_NG}
+      - JENKINS_TOKEN_CLASSIC=${JENKINS_TOKEN_CLASSIC}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - HMAC_SECRET_KEY=${HMAC_SECRET_KEY}
+      - DOCUMENTATION_PATH=/var/builds/docs
+      - INSTALLERS_PATH=/var/builds/installers
+      - NG_DB_CONNECTION_STRING=${NG_DB_CONNECTION_STRING}
+      - OLD_DB_CONNECTION_STRING=${OLD_DB_CONNECTION_STRING}
+      - GITHUB_PAT=${GITHUB_PAT}
+      - ASPNETCORE_ENVIRONMENT=Production
+    volumes:
+      - ${DOCUMENTATION_PATH}:/var/builds/docs
+      - ${INSTALLERS_PATH}:/var/builds/installers
+    networks:
+      - apsim
+
+  builds-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: builds-db
+    restart: unless-stopped
+    profiles:
+      - all
+    volumes:
+      - /data/builds/db:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD}
+    networks:
+      - apsim
+
+  httpd:
+    image: httpd:apsim
+    pull_policy: always
+    container_name: httpd
+    restart: unless-stopped
+    profiles:
+      - all
+      - httpd
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+    networks:
+      - apsim
+
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    pull_policy: always
+    container_name: jenkins
+    restart: unless-stopped
+    profiles:
+      - all
+    volumes:
+      - /data/jenkins:/var/jenkins_home
+    networks:
+      - apsim
+
+  postats-site:
+    image: apsiminitiative/postats:latest
+    pull_policy: always
+    container_name: postats-site
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - PORTAL_DB=${PORTAL_DB}
+      - COLLECTOR_URL=${COLLECTOR_URL}
+      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    networks:
+      - apsim
+
+  postats-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: postats-db
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - /data/postats/db:/var/lib/mysql
+    networks:
+      - apsim
+
+  registration-site:
+    image: apsiminitiative/registration-site:latest
+    pull_policy: always
+    container_name: registration-site
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+      - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_TOKEN=${SMTP_TOKEN}
+      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
+    networks:
+      - apsim
+
+  registration-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: registration-db
+    restart: unless-stopped
+    profiles:
+      - all
+    networks:
+      - apsim
+    volumes:
+      - /data/registration/db:/var/lib/mysql
+
+  vault:
+    image: vaultwarden/server:latest
+    pull_policy: always
+    container_name: vault
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+      - ROCKET_PORT=8123
+      - SIGNUPS_ALLOWED=false
+      # - ADMIN_TOKEN=${ADMIN_TOKEN}
+    volumes:
+      - /data/vault:/data
+    networks:
+      - apsim
+
+# Temporary Infrastructure containers - requires Infrastructure repo (uses ric394/AgCatalyst branch - containers need to be built manually)
+  opentsdb:
+    image: petergrace/opentsdb-docker:latest
+    container_name: opentsdb
+    profiles:
+      - all
+    environment:
+    - WAITSECS=60
+    volumes:
+      - tsdb:/data/hbase
+      - ./src/open_tsdb/config:/etc/opentsdb
+    networks:
+      - apsim
+
+  mongodb:
+    image: mongodb/mongodb-community-server
+    container_name: mongodb
+    profiles:
+      - all
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_INITDB_ROOT_USERNAME}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_INITDB_ROOT_PASSWORD}
+      - MONGODB_HOST=${MONGODB_HOST}
+    volumes:
+      - tsdb:/data/hbase
+      - ./src/open_tsdb/config:/etc/opentsdb
+    networks:
+      - apsim
+
+  api:
+    image: api
+    container_name: api
+    profiles:
+      - all
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_INITDB_ROOT_USERNAME}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_INITDB_ROOT_PASSWORD}
+      - MONGODB_HOST=${MONGODB_HOST}
+      - FASTAPI_SIMPLE_SECURITY_SECRET=${FHWORKER_ADMIN_API_KEY}
+      - FASTAPI_SIMPLE_SECURITY_DB_LOCATION=/data/keys.db
+    volumes:
+      - api:/data
+    networks:
+      - apsim
+
+  collectors:
+    image: collectors:latest
+    container_name: collectors
+    profiles:
+      - all
+    environment:
+      - ENVIRONDATA_FORESTHILL_USERNAME=${ENVIRONDATA_FORESTHILL_USERNAME}
+      - ENVIRONDATA_FORESTHILL_PASSWORD=${ENVIRONDATA_FORESTHILL_PASSWORD}
+      - ENVIRONDATA_BARS_USERNAME=${ENVIRONDATA_BARS_USERNAME}
+      - ENVIRONDATA_BARS_PASSWORD=${ENVIRONDATA_BARS_PASSWORD}
+      - AGCOMMANDER_FORESTHILL_BUSINESSID=${AGCOMMANDER_FORESTHILL_BUSINESSID}
+      - AGCOMMANDER_FORESTHILL_APIKEY=${AGCOMMANDER_FORESTHILL_APIKEY}
+      - FHWORKER_ADMIN_API_KEY=${FHWORKER_ADMIN_API_KEY}
+      - FHWORKER_API_KEY=${FHWORKER_API_KEY}
+      - HEALTHCHECK_PING_KEY=${HEALTHCHECK_PING_KEY}
+    networks:
+      - apsim
+
+  dashboard:
+    image: dashboard
+    container_name: dashboard
+    profiles:
+      - all
+    environment:
+      - SENAPS_API_KEY=${SENAPS_API_KEY}
+      - FHWORKER_API_KEY=${FHWORKER_API_KEY}
+    networks:
+      - apsim
+
+volumes:
+  tsdb:
+  mongodata:
+  api:
+
+networks:
+  apsim:
+    external: true
