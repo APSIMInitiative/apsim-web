@@ -13,7 +13,7 @@ services:
     volumes:
       - /data/vault:/data
     networks:
-      - vault_httpd
+      - apsim
 networks:
-  vault_httpd:
-    name: vault_httpd
+  apsim:
+    external: true

@@ -22,20 +22,18 @@ services:
       - ${DOCUMENTATION_PATH}:/var/builds/docs
       - ${INSTALLERS_PATH}:/var/builds/installers
     networks:
-      - builds_httpd
-      - builds_db
+      - apsim
   db:
     image: mariadb:10
     container_name: builds-db
     restart: unless-stopped
-    networks:
-      - builds_db
     volumes:
       - /data/builds/db:/var/lib/mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD}
+    networks:
+      - apsim
+
 networks:
-  builds_db:
-    name: builds_db
-  builds_httpd:
-    name: builds_httpd
+  apsim:
+    external: true
