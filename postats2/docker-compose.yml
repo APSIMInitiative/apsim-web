@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  website:
+    image: apsiminitiative/postats:latest
+    container_name: postats2-site
+    restart: unless-stopped
+    environment:
+      - PORTAL_DB=${PORTAL_DB}
+      - COLLECTOR_URL=${COLLECTOR_URL}
+      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    networks:
+      - apsim
+  db:
+    image: mariadb:10
+    container_name: postats2-db
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - /data/postats2/db:/var/lib/mysql
+    networks:
+      - apsim
+
+networks:
+  apsim:
+    external: true

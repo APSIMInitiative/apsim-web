@@ -145,77 +145,32 @@ services:
     networks:
       - apsim
 
-# Temporary Infrastructure containers - requires Infrastructure repo (uses ric394/AgCatalyst branch - containers need to be built manually)
-  opentsdb:
-    image: petergrace/opentsdb-docker:latest
-    container_name: opentsdb
+  postats2-site:
+    image: apsiminitiative/postats:latest
+    pull_policy: always
+    container_name: postats2-site
+    restart: unless-stopped
     profiles:
       - all
     environment:
-    - WAITSECS=60
+      - PORTAL_DB=${PORTAL_DB}
+      - COLLECTOR_URL=${COLLECTOR_URL}
+      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    networks:
+      - apsim
+
+  postats2-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: postats2-db
+    restart: unless-stopped
+    profiles:
+      - all
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
     volumes:
-      - tsdb:/data/hbase
-      - ./src/open_tsdb/config:/etc/opentsdb
-    networks:
-      - apsim
-
-  mongodb:
-    image: mongodb/mongodb-community-server
-    container_name: mongodb
-    profiles:
-      - all
-    environment:
-      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_INITDB_ROOT_USERNAME}
-      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_INITDB_ROOT_PASSWORD}
-      - MONGODB_HOST=${MONGODB_HOST}
-    volumes:
-      - tsdb:/data/hbase
-      - ./src/open_tsdb/config:/etc/opentsdb
-    networks:
-      - apsim
-
-  api:
-    image: api
-    container_name: api
-    profiles:
-      - all
-    environment:
-      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_INITDB_ROOT_USERNAME}
-      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_INITDB_ROOT_PASSWORD}
-      - MONGODB_HOST=${MONGODB_HOST}
-      - FASTAPI_SIMPLE_SECURITY_SECRET=${FHWORKER_ADMIN_API_KEY}
-      - FASTAPI_SIMPLE_SECURITY_DB_LOCATION=/data/keys.db
-    volumes:
-      - api:/data
-    networks:
-      - apsim
-
-  collectors:
-    image: collectors:latest
-    container_name: collectors
-    profiles:
-      - all
-    environment:
-      - ENVIRONDATA_FORESTHILL_USERNAME=${ENVIRONDATA_FORESTHILL_USERNAME}
-      - ENVIRONDATA_FORESTHILL_PASSWORD=${ENVIRONDATA_FORESTHILL_PASSWORD}
-      - ENVIRONDATA_BARS_USERNAME=${ENVIRONDATA_BARS_USERNAME}
-      - ENVIRONDATA_BARS_PASSWORD=${ENVIRONDATA_BARS_PASSWORD}
-      - AGCOMMANDER_FORESTHILL_BUSINESSID=${AGCOMMANDER_FORESTHILL_BUSINESSID}
-      - AGCOMMANDER_FORESTHILL_APIKEY=${AGCOMMANDER_FORESTHILL_APIKEY}
-      - FHWORKER_ADMIN_API_KEY=${FHWORKER_ADMIN_API_KEY}
-      - FHWORKER_API_KEY=${FHWORKER_API_KEY}
-      - HEALTHCHECK_PING_KEY=${HEALTHCHECK_PING_KEY}
-    networks:
-      - apsim
-
-  dashboard:
-    image: dashboard
-    container_name: dashboard
-    profiles:
-      - all
-    environment:
-      - SENAPS_API_KEY=${SENAPS_API_KEY}
-      - FHWORKER_API_KEY=${FHWORKER_API_KEY}
+      - /data/postats2/db:/var/lib/mysql
     networks:
       - apsim
 
