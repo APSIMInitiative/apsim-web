@@ -6,8 +6,11 @@ services:
     pull_policy: always
     container_name: apsim-builds
     restart: unless-stopped
+    context: ./builds
     profiles:
       - all
+      - builds
+      - apsim-builds
     environment:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
       - JENKINS_URL=${JENKINS_URL}
@@ -32,8 +35,11 @@ services:
     pull_policy: always
     container_name: builds-db
     restart: unless-stopped
+    context: ./builds
     profiles:
       - all
+      - builds
+      - builds-db
     volumes:
       - /data/builds/db:/var/lib/mysql
     environment:
@@ -46,6 +52,7 @@ services:
     pull_policy: always
     container_name: httpd
     restart: unless-stopped
+    context: ./httpd
     profiles:
       - all
       - httpd
@@ -62,8 +69,10 @@ services:
     pull_policy: always
     container_name: jenkins
     restart: unless-stopped
+    context: ./jenkins
     profiles:
       - all
+      - jenkins
     volumes:
       - /data/jenkins:/var/jenkins_home
     networks:
@@ -74,8 +83,11 @@ services:
     pull_policy: always
     container_name: postats-site
     restart: unless-stopped
+    context: ./postats
     profiles:
       - all
+      - postats
+      - postats-site
     environment:
       - PORTAL_DB=${PORTAL_DB}
       - COLLECTOR_URL=${COLLECTOR_URL}
@@ -89,8 +101,11 @@ services:
     pull_policy: always
     container_name: postats-db
     restart: unless-stopped
+    context: ./postats
     profiles:
       - all
+      - postats
+      - postats-db
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
     volumes:
@@ -103,8 +118,11 @@ services:
     pull_policy: always
     container_name: registration-site
     restart: unless-stopped
+    context: ./registration
     profiles:
       - all
+      - registration
+      - registration-db
     environment:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
       - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
@@ -121,8 +139,11 @@ services:
     pull_policy: always
     container_name: registration-db
     restart: unless-stopped
+    context: ./registration
     profiles:
       - all
+      - registration
+      - registration-db
     networks:
       - apsim
     volumes:
@@ -133,8 +154,10 @@ services:
     pull_policy: always
     container_name: vault
     restart: unless-stopped
+    context: ./vault
     profiles:
       - all
+      - vault
     environment:
       - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
       - ROCKET_PORT=8123
@@ -150,8 +173,11 @@ services:
     pull_policy: always
     container_name: postats2-site
     restart: unless-stopped
+    context: ./postats2
     profiles:
       - all
+      - postats2
+      - postats2-site
     environment:
       - PORTAL_DB=${PORTAL_DB}
       - COLLECTOR_URL=${COLLECTOR_URL}
@@ -165,14 +191,36 @@ services:
     pull_policy: always
     container_name: postats2-db
     restart: unless-stopped
+    context: ./postats2
     profiles:
       - all
+      - postats2
+      - postats2-db
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
     volumes:
       - /data/postats2/db:/var/lib/mysql
     networks:
       - apsim
+
+  apsim-docs:
+    image: apsiminitiative/apsim-docs:latest
+    pull_policy: always
+    container_name: apsim-docs
+    restart: unless-stopped
+    context: ./apsim-docs
+    profile:
+      - all
+      - apsim-docs
+    networks:
+      - apsim
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 6gb
 
 volumes:
   tsdb:
