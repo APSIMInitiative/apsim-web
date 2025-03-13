@@ -1,6 +1,24 @@
 # Top level docker compose
 
 services:
+
+  apsim-docs:
+    image: apsiminitiative/apsim-docs:latest
+    pull_policy: always
+    container_name: apsim-docs
+    restart: unless-stopped
+    networks:
+      - apsim
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 6gb
+    networks:
+      - apsim
+
   apsim-builds:
     image: apsiminitiative/apsim-builds:latest
     pull_policy: always
@@ -128,22 +146,22 @@ services:
     volumes:
       - /data/registration/db:/var/lib/mysql
 
-  vault:
-    image: vaultwarden/server:latest
-    pull_policy: always
-    container_name: vault
-    restart: unless-stopped
-    profiles:
-      - all
-    environment:
-      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
-      - ROCKET_PORT=8123
-      - SIGNUPS_ALLOWED=false
-      # - ADMIN_TOKEN=${ADMIN_TOKEN}
-    volumes:
-      - /data/vault:/data
-    networks:
-      - apsim
+#  vault:
+#    image: vaultwarden/server:latest
+#    pull_policy: always
+#    container_name: vault
+#    restart: unless-stopped
+#    profiles:
+#      - all
+#    environment:
+#      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+#      - ROCKET_PORT=8123
+#      - SIGNUPS_ALLOWED=false
+#      # - ADMIN_TOKEN=${ADMIN_TOKEN}
+#    volumes:
+#      - /data/vault:/data
+#    networks:
+#      - apsim
 
   postats2-site:
     image: apsiminitiative/postats:latest
