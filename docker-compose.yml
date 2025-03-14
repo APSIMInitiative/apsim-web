@@ -6,7 +6,9 @@ services:
     pull_policy: always
     container_name: apsim-builds
     restart: unless-stopped
-    context: ./builds
+    build:
+      context: ./builds
+      dockerfile: ./builds/dockerfile
     profiles:
       - all
       - builds
@@ -53,6 +55,9 @@ services:
     container_name: httpd
     restart: unless-stopped
     context: ./httpd
+    build:
+      context: ./httpd
+      dockerfile: ./httpd/Dockerfile
     profiles:
       - all
       - httpd
@@ -69,7 +74,6 @@ services:
     pull_policy: always
     container_name: jenkins
     restart: unless-stopped
-    context: ./jenkins
     profiles:
       - all
       - jenkins
@@ -83,7 +87,6 @@ services:
     pull_policy: always
     container_name: postats-site
     restart: unless-stopped
-    context: ./postats
     profiles:
       - all
       - postats
@@ -101,7 +104,6 @@ services:
     pull_policy: always
     container_name: postats-db
     restart: unless-stopped
-    context: ./postats
     profiles:
       - all
       - postats
@@ -118,7 +120,9 @@ services:
     pull_policy: always
     container_name: registration-site
     restart: unless-stopped
-    context: ./registration
+    builds:
+      context: ./registration
+      dockerfile: ./registration/Dockerfile
     profiles:
       - all
       - registration
@@ -139,7 +143,6 @@ services:
     pull_policy: always
     container_name: registration-db
     restart: unless-stopped
-    context: ./registration
     profiles:
       - all
       - registration
@@ -149,31 +152,11 @@ services:
     volumes:
       - /data/registration/db:/var/lib/mysql
 
-  vault:
-    image: vaultwarden/server:latest
-    pull_policy: always
-    container_name: vault
-    restart: unless-stopped
-    context: ./vault
-    profiles:
-      - all
-      - vault
-    environment:
-      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
-      - ROCKET_PORT=8123
-      - SIGNUPS_ALLOWED=false
-      # - ADMIN_TOKEN=${ADMIN_TOKEN}
-    volumes:
-      - /data/vault:/data
-    networks:
-      - apsim
-
   postats2-site:
     image: apsiminitiative/postats:latest
     pull_policy: always
     container_name: postats2-site
     restart: unless-stopped
-    context: ./postats2
     profiles:
       - all
       - postats2
@@ -191,7 +174,6 @@ services:
     pull_policy: always
     container_name: postats2-db
     restart: unless-stopped
-    context: ./postats2
     profiles:
       - all
       - postats2
@@ -208,7 +190,6 @@ services:
     pull_policy: always
     container_name: apsim-docs
     restart: unless-stopped
-    context: ./apsim-docs
     profile:
       - all
       - apsim-docs
