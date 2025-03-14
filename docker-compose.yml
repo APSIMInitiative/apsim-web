@@ -6,9 +6,6 @@ services:
     pull_policy: always
     container_name: apsim-builds
     restart: unless-stopped
-    build:
-      context: ./builds
-      dockerfile: ./builds/dockerfile
     profiles:
       - all
       - builds
@@ -37,7 +34,6 @@ services:
     pull_policy: always
     container_name: builds-db
     restart: unless-stopped
-    context: ./builds
     profiles:
       - all
       - builds
@@ -54,7 +50,6 @@ services:
     pull_policy: always
     container_name: httpd
     restart: unless-stopped
-    context: ./httpd
     build:
       context: ./httpd
       dockerfile: ./httpd/Dockerfile
@@ -120,7 +115,7 @@ services:
     pull_policy: always
     container_name: registration-site
     restart: unless-stopped
-    builds:
+    build:
       context: ./registration
       dockerfile: ./registration/Dockerfile
     profiles:
@@ -190,7 +185,7 @@ services:
     pull_policy: always
     container_name: apsim-docs
     restart: unless-stopped
-    profile:
+    profiles:
       - all
       - apsim-docs
     networks:
