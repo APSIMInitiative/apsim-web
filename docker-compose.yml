@@ -201,13 +201,11 @@ services:
   apsoil-api:
     image: apsiminitiative/apsoil:latest
     container_name: apsoil-api
+    pull_policy: always
     restart: unless-stopped
     profiles:
       - all
       - apsoil-api
-    # uncomment for debugging on localhost
-    #ports:
-    #  - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
