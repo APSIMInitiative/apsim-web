@@ -198,13 +198,13 @@ services:
           cpus: '0.8'
           memory: 6gb
 
-  apsoil:
+  apsoil-api:
     image: apsiminitiative/apsoil:latest
-    container_name: apsoil
+    container_name: apsoil-api
     restart: unless-stopped
     profiles:
       - all
-      - apsoil
+      - apsoil-api
     # uncomment for debugging on localhost
     #ports:
     #  - "8080:8080"
