@@ -198,6 +198,23 @@ services:
           cpus: '0.8'
           memory: 6gb
 
+  apsoil:
+    image: apsiminitiative/apsoil:latest
+    container_name: apsoil
+    restart: unless-stopped
+    profiles:
+      - all
+      - apsoil
+    # uncomment for debugging on localhost
+    #ports:
+    #  - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - /data/apsoil/db:/app/db
+    networks:
+      - apsim
+
 volumes:
   tsdb:
   mongodata:
