@@ -16,7 +16,7 @@ services:
     networks:
       - apsim
     ports:
-      - 8080:8000
+      - 8000:8080
   db:
     image: mariadb:10
     container_name: registration-db
