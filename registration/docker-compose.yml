@@ -15,6 +15,8 @@ services:
       - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
     networks:
       - apsim
+    ports:
+      - 8000:8080
   db:
     image: mariadb:10
     container_name: registration-db
