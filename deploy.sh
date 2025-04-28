@@ -29,5 +29,6 @@ else
 
     # Restart the containers and builds any that have a build specification, ignoring any errors while stopping the running container.
     docker-compose --profile $command down --timeout 60 | echo Ignoring errors...
+    docker build --no-cache -f "httpd/Dockerfile" -t httpd:apsim httpd
     docker-compose --profile $command up -d 
 fi
