@@ -23,6 +23,8 @@ services:
       - OLD_DB_CONNECTION_STRING=${OLD_DB_CONNECTION_STRING}
       - GITHUB_PAT=${GITHUB_PAT}
       - ASPNETCORE_ENVIRONMENT=Production
+      - MARIADB_USERNAME=${MARIADB_USERNAME}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - ${DOCUMENTATION_PATH}:/var/builds/docs
       - ${INSTALLERS_PATH}:/var/builds/installers
