@@ -79,15 +79,15 @@ services:
     networks:
       - apsim
 
-  postats-site:
-    image: apsiminitiative/postats:latest
+  postats-portal:
+    image: apsiminitiative/postats-portal:latest
     pull_policy: always
-    container_name: postats-site
+    container_name: postats-portal
     restart: unless-stopped
     profiles:
       - all
       - postats
-      - postats-site
+      - postats-portal
     environment:
       - PORTAL_DB=${PORTAL_DB}
       - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
