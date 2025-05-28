@@ -150,15 +150,15 @@ services:
     volumes:
       - /data/registration/db:/var/lib/mysql
 
-  postats2-site:
+  postats2-portal:
     image: apsiminitiative/postats:latest
     pull_policy: always
-    container_name: postats2-site
+    container_name: postats2-portal
     restart: unless-stopped
     profiles:
       - all
       - postats2
-      - postats2-site
+      - postats2-portal
     environment:
       - PORTAL_DB=${PORTAL2_DB}
       - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
