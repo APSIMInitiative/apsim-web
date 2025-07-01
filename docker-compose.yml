@@ -152,7 +152,7 @@ services:
       - /data/registration/db:/var/lib/mysql
 
   postats2-portal:
-    image: apsiminitiative/postats:latest
+    image: apsiminitiative/postats2-portal:latest
     pull_policy: always
     container_name: postats2-portal
     restart: unless-stopped
