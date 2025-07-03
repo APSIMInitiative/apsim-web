@@ -164,6 +164,7 @@ services:
       - PORTAL_DB=${PORTAL2_DB}
       - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - POSTATS_UPLOAD_URL=${POSTATS2_UPLOAD_URL}
     ports:
       - 8082:8080
     networks:
