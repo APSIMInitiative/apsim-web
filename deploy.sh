@@ -7,6 +7,7 @@ then
     echo "  Where command is one of:"
     echo "    all               brings all containers up "
     echo "    down              bring docker stack down"
+    echo "    apsim-docs        bring up the apsim-docs container"
     exit 1
 fi
 
@@ -17,6 +18,10 @@ set -euo pipefail  # stop on errors
 if [ $command == "down" ]; then
     echo "Bringing docker stack down"
     docker-compose --profile all down --timeout 60
+elif [ $command == "apsim-docs" ]; then
+    echo "Bringing docker stack apsim-docs up"
+    docker-compose --profile apsim-docs down --timeout 60
+    docker-compose --profile apsim-docs up -d
 else
 
     if [ $command == "all" ]; then
