@@ -18,6 +18,7 @@ set -euo pipefail  # stop on errors
 if [ $command == "down" ]; then
     echo "Bringing docker stack down"
     docker compose --profile all down --timeout 60
+    docker compose --profile apsim-docs down --timeout 60 
 elif [ $command == "apsim-docs" ]; then
     echo "Bringing docker stack apsim-docs up"
     docker compose --profile apsim-docs down --timeout 60
