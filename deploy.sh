@@ -31,6 +31,11 @@ else
         ./clean.sh
     fi
 
+    if [ $command == "dev" ]; then
+        echo "Deploying all containers without clean"
+        chmod +x *.sh
+    fi
+
     echo "Bringing docker stack $command up"
 
     # Restart the containers and builds any that have a build specification, ignoring any errors while stopping the running container.
