@@ -7,6 +7,7 @@ services:
     container_name: apsim-builds
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - builds
       - apsim-builds
@@ -37,6 +38,7 @@ services:
     container_name: builds-db
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - builds
       - builds-db
@@ -56,6 +58,7 @@ services:
       context: ./httpd
       dockerfile: ./Dockerfile
     profiles:
+      - dev
       - all
       - httpd
     ports:
@@ -72,6 +75,7 @@ services:
     container_name: jenkins
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - jenkins
     volumes:
@@ -85,6 +89,7 @@ services:
     container_name: postats-portal
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - postats
       - postats-portal
@@ -104,6 +109,7 @@ services:
     container_name: postats-db
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - postats
       - postats-db
@@ -123,6 +129,7 @@ services:
       context: ./registration
       dockerfile: ./registration/Dockerfile
     profiles:
+      - dev
       - all
       - registration
       - registration-db
@@ -143,6 +150,7 @@ services:
     container_name: registration-db
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - registration
       - registration-db
@@ -157,6 +165,7 @@ services:
     container_name: postats2-portal
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - postats2
       - postats2-portal
@@ -176,6 +185,7 @@ services:
     container_name: postats2-db
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - postats2
       - postats2-db
@@ -196,12 +206,16 @@ services:
     networks:
       - apsim
     ports:
-      - "8080:8080"
+      - 5000:5000
     deploy:
       resources:
         limits:
           cpus: '0.8'
           memory: 6gb
+    volumes:
+      - /data/apsim-docs/:/app/apsim-docs-html
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
 
   apsoil-api:
     image: apsiminitiative/apsoil:latest
@@ -209,6 +223,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     profiles:
+      - dev
       - all
       - apsoil-api
     environment:
