@@ -191,6 +191,9 @@ services:
       - postats2-db
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - AZURE_BATCH_ACCOUNT_URL=${AZURE_BATCH_ACCOUNT_URL}
+      - AZURE_BATCH_ACCOUNT_NAME=${AZURE_BATCH_ACCOUNT_NAME}
+      - AZURE_BATCH_ACCOUNT_KEY=${AZURE_BATCH_ACCOUNT_KEY}
     volumes:
       - /data/postats2/db:/var/lib/mysql
     networks:
