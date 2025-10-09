@@ -149,6 +149,8 @@ services:
     pull_policy: always
     container_name: registration-db
     restart: unless-stopped
+    environment:
+      - MARIADB_AUTO_UPGRADE=true
     profiles:
       - dev
       - all
