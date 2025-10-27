@@ -136,10 +136,8 @@ services:
     environment:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
       - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
-      - SMTP_HOST=${SMTP_HOST}
-      - SMTP_PORT=${SMTP_PORT}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_TOKEN=${SMTP_TOKEN}
+      - MAILJET_API_KEY=${MAILJET_API_KEY}
+      - MAILJET_API_SECRET=${MAILJET_API_SECRET}
       - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
     networks:
       - apsim
