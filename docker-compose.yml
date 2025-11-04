@@ -83,43 +83,6 @@ services:
     networks:
       - apsim
 
-  postats-portal:
-    image: apsiminitiative/postats-portal:latest
-    pull_policy: always
-    container_name: postats-portal
-    restart: unless-stopped
-    profiles:
-      - dev
-      - all
-      - postats
-      - postats-portal
-    environment:
-      - PORTAL_DB=${PORTAL_DB}
-      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - POSTATS_UPLOAD_URL=${POSTATS_UPLOAD_URL}
-    ports:
-      - 8081:8080
-    networks:
-      - apsim
-
-  postats-db:
-    image: mariadb:10
-    pull_policy: always
-    container_name: postats-db
-    restart: unless-stopped
-    profiles:
-      - dev
-      - all
-      - postats
-      - postats-db
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-    volumes:
-      - /data/postats/db:/var/lib/mysql
-    networks:
-      - apsim
-
   registration-site:
     image: apsiminitiative/registration-site:latest
     pull_policy: always
@@ -210,11 +173,6 @@ services:
       - apsim
     ports:
       - 5000:5000
-    deploy:
-      resources:
-        limits:
-          cpus: '0.8'
-          memory: 6gb
     volumes:
       - /data/apsim-docs/:/app/apsim-docs-html
     environment:
