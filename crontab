@@ -21,8 +21,7 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
-# This runs at 4:30 each night UTC time.
+# This runs at 2:00am Brisbane Time each night UTC time.
 
-0 17 * * * /home/webmaster/sources/apsim-web/deploy.sh down
-1 17 * * * /home/webmaster/sources/apsim-web/deploy.sh apsim-docs
-30 17 * * * /home/webmaster/sources/apsim-web/deploy.sh all
+0 16 * * * /home/webmaster/sources/apsim-web/deploy.sh down
+2 16 * * * /home/webmaster/sources/apsim-web/deploy.sh all
