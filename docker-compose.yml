@@ -69,20 +69,6 @@ services:
     networks:
       - apsim
 
-  jenkins:
-    image: jenkins/jenkins:2.462.3-jdk11
-    pull_policy: always
-    container_name: jenkins
-    restart: unless-stopped
-    profiles:
-      - dev
-      - all
-      - jenkins
-    volumes:
-      - /data/jenkins:/var/jenkins_home
-    networks:
-      - apsim
-
   registration-site:
     image: apsiminitiative/registration-site:latest
     pull_policy: always
