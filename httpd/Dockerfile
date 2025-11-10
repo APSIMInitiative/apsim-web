@@ -7,7 +7,7 @@ COPY ./hosts/*.conf /usr/local/apache2/conf/extra/httpd-vhosts.conf.d/
 # Copy certificates.
 COPY .certs/server.crt /usr/local/apache2/conf/server.crt
 COPY .certs/server-chain.crt /usr/local/apache2/conf/server-chain.crt
-COPY .certs/server.pem /usr/local/apache2/conf/server.pem
+COPY .certs/server.key /usr/local/apache2/conf/server.key
 
 # Copy in config file overrides.
 COPY httpd.conf /usr/local/apache2/conf/httpd.conf
