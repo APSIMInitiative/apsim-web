@@ -3,7 +3,7 @@
 services:
   apsim-builds:
     image: apsiminitiative/apsim-builds:latest
-    pull_policy: always
+    pull_policy: never
     container_name: apsim-builds
     restart: unless-stopped
     profiles:
@@ -145,6 +145,46 @@ services:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
     volumes:
       - /data/postats2/db:/var/lib/mysql
+    networks:
+      - apsim
+
+  postats-dev-portal:
+    image: apsiminitiative/postats-dev-portal:latest
+    pull_policy: always
+    container_name: postats-dev-portal
+    restart: unless-stopped
+    profiles:
+      - dev
+      - all
+      - postats-dev
+      - postats-dev-portal
+    environment:
+      - PORTAL_DB=${PORTAL_DB}
+      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - POSTATS_UPLOAD_URL=${POSTATS_UPLOAD_URL}
+      - AZURE_BATCH_ACCOUNT_URL=${AZURE_BATCH_ACCOUNT_URL}
+      - AZURE_BATCH_ACCOUNT_NAME=${AZURE_BATCH_ACCOUNT_NAME}
+      - AZURE_BATCH_ACCOUNT_KEY=${AZURE_BATCH_ACCOUNT_KEY}
+    ports:
+      - 8081:8080
+    networks:
+      - apsim
+
+  postats-dev-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: postats-dev-db
+    restart: unless-stopped
+    profiles:
+      - dev
+      - all
+      - postats-dev
+      - postats-dev-db
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - /data/postats-dev/db:/var/lib/mysql
     networks:
       - apsim
 
