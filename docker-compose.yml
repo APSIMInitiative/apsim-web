@@ -85,9 +85,8 @@ services:
     environment:
       - APACHE_LOG_DIR=/usr/local/apache2/logs
       - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
-      - MAILJET_API_KEY=${MAILJET_API_KEY}
-      - MAILJET_API_SECRET=${MAILJET_API_SECRET}
       - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     networks:
       - apsim
 
