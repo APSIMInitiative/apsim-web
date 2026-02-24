@@ -1,5 +1,5 @@
 # Dockerfile for building httpd docker image for apsim web services.
-FROM httpd:2.4
+FROM httpd:2.4.66
 
 # Copy in vrtual host config files from the hosts directory.
 COPY ./hosts/*.conf /usr/local/apache2/conf/extra/httpd-vhosts.conf.d/
