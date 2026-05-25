@@ -219,10 +219,50 @@ services:
     networks:
       - apsim
 
+  registration-web-api:
+    image: ghcr.io/apsiminitiative/registration-web-api:latest
+    env_file:
+      - .env
+    profiles:
+      - all
+      - registration2
+      - registration-web-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__RegistrationDb: Data Source=/app/data/APSIMRegistrationSystemWebAPI.db
+    ports:
+      - "8088:80"
+    volumes:
+      - registration_api_db:/app/data
+    restart: unless-stopped
+    networks:
+      - apsim
+
+  registration-web-app:
+    image: ghcr.io/apsiminitiative/registration-web-app:latest
+    container_name: apsim-registration-webapp
+    env_file:
+      - .env
+    profiles:
+      - all
+      - registration2
+      - registration-web-app
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      WebApi__BaseUrl: http://registration-web-api/
+    ports:
+      - "8089:80"
+    depends_on:
+      - registration-web-api
+    restart: unless-stopped
+    networks:
+      - apsim
+
 volumes:
   tsdb:
   mongodata:
   api:
+  registration_api_db:
 
 networks:
   apsim:
