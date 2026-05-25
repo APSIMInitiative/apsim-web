@@ -222,7 +222,7 @@ services:
   registration-web-api:
     image: ghcr.io/apsiminitiative/registration-web-api:latest
     env_file:
-      - ./RegistrationWebAPI/.env
+      - .env
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__RegistrationDb: Data Source=/app/data/APSIMRegistrationSystemWebAPI.db
@@ -238,7 +238,7 @@ services:
     image: ghcr.io/apsiminitiative/registration-web-app:latest
     container_name: apsim-registration-webapp
     env_file:
-      - ./RegistrationWebApp/.env
+      - .env
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       WebApi__BaseUrl: http://registration-web-api/
