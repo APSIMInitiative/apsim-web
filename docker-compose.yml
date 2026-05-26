@@ -221,6 +221,8 @@ services:
 
   registration-web-api:
     image: ghcr.io/apsiminitiative/apsim-registration-webapi:latest
+    pull_policy: always
+    container_name: registration-web-api
     env_file:
       - .env
     profiles:
@@ -240,7 +242,8 @@ services:
 
   registration-web-app:
     image: ghcr.io/apsiminitiative/apsim-registration-webapp:latest
-    container_name: apsim-registration-webapp
+    pull_policy: always
+    container_name: registration-web-app
     env_file:
       - .env
     profiles:
