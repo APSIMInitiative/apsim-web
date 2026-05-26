@@ -43,6 +43,6 @@ else
     docker build --no-cache -f ./httpd/Dockerfile -t httpd:apsim httpd
     # Login to GitHub Container Registry using the GITHUB_PAT secret, 
     # which is required to pull the registration-web-app and api image from the registry.
-    echo $GITHUB_PAT | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+    echo $APSIM_WEB_PAT | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
     docker compose --profile $command up -d
 fi
