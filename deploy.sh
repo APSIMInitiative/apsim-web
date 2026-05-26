@@ -50,8 +50,10 @@ else
     # Restart the containers and builds any that have a build specification, ignoring any errors while stopping the running container.
     docker compose --profile $command down --timeout 60 | echo Ignoring errors...
     docker build --no-cache -f ./httpd/Dockerfile -t httpd:apsim httpd
-    # Login to GitHub Container Registry using the GITHUB_PAT secret, 
-    # which is required to pull the registration-web-app and api image from the registry.
-    echo $APSIM_WEB_PAT | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+    # Login to GitHub Container Registry using APSIM_WEB_PAT and GITHUB_ACTOR,
+    # which are required to pull the registration-web-app and api images from the registry.
+    : "${APSIM_WEB_PAT:?APSIM_WEB_PAT is required}"
+    : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
+    printf '%s' "$APSIM_WEB_PAT" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
     docker compose --profile $command up -d
 fi
