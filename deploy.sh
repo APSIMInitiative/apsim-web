@@ -15,6 +15,15 @@ command=$1
 
 set -euo pipefail  # stop on errors
 
+# Load .env values for this script process only.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/.env" ]]; then
+    set -a
+    # shellcheck disable=SC1091
+    source "$SCRIPT_DIR/.env"
+    set +a
+fi
+
 if [ $command == "down" ]; then
     echo "Bringing docker stack down"
     docker compose --profile all down --timeout 60
