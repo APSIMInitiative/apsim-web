@@ -220,7 +220,7 @@ services:
       - apsim
 
   registration-web-api:
-    image: ghcr.io/apsiminitiative/registration-web-api:latest
+    image: ghcr.io/apsiminitiative/apsim-registration-webapi:latest
     env_file:
       - .env
     profiles:
@@ -239,7 +239,7 @@ services:
       - apsim
 
   registration-web-app:
-    image: ghcr.io/apsiminitiative/registration-web-app:latest
+    image: ghcr.io/apsiminitiative/apsim-registration-webapp:latest
     container_name: apsim-registration-webapp
     env_file:
       - .env
