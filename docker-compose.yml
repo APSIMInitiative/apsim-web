@@ -236,7 +236,7 @@ services:
     ports:
       - "8088:80"
     volumes:
-      - registration_api_db:/app/data
+      - ${REGISTRATION_SYSTEM_DB_PATH}:/app/data
     restart: unless-stopped
     networks:
       - apsim
