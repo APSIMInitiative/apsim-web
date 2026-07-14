@@ -200,6 +200,7 @@ services:
       - 5000:5000
     volumes:
       - /data/apsim-docs/:/app/apsim-docs-html
+      - /data/apsim-docs-md/:/app/apsim-docs-md
     environment:
       - ASPNETCORE_URLS=http://*:5000
 
@@ -235,7 +236,7 @@ services:
     ports:
       - "8088:80"
     volumes:
-      - registration_api_db:/app/data
+      - ${REGISTRATION_SYSTEM_DB_PATH}:/app/data
     restart: unless-stopped
     networks:
       - apsim
