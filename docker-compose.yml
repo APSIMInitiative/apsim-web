@@ -155,6 +155,7 @@ services:
     container_name: apsim-docs
     restart: unless-stopped
     profiles:
+      - all
       - apsim-docs
     networks:
       - apsim
