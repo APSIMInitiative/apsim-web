@@ -69,44 +69,6 @@ services:
     networks:
       - apsim
 
-  registration-site:
-    image: apsiminitiative/registration-site:latest
-    pull_policy: always
-    container_name: registration-site
-    restart: unless-stopped
-    build:
-      context: ./registration
-      dockerfile: ./registration/Dockerfile
-    profiles:
-      - dev
-      - all
-      - registration
-      - registration-db
-    environment:
-      - APACHE_LOG_DIR=/usr/local/apache2/logs
-      - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
-      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-    networks:
-      - apsim
-
-  registration-db:
-    image: mariadb:10
-    pull_policy: always
-    container_name: registration-db
-    restart: unless-stopped
-    environment:
-      - MARIADB_AUTO_UPGRADE=true
-    profiles:
-      - dev
-      - all
-      - registration
-      - registration-db
-    networks:
-      - apsim
-    volumes:
-      - /data/registration/db:/var/lib/mysql
-
   postats2-portal:
     image: apsiminitiative/postats2-portal:latest
     pull_policy: always
@@ -228,7 +190,7 @@ services:
       - .env
     profiles:
       - all
-      - registration2
+      - registration
       - registration-web-api
     environment:
       ASPNETCORE_ENVIRONMENT: Production
@@ -249,7 +211,7 @@ services:
       - .env
     profiles:
       - all
-      - registration2
+      - registration
       - registration-web-app
     environment:
       ASPNETCORE_ENVIRONMENT: Production
