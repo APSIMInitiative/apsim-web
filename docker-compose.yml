@@ -225,6 +225,40 @@ services:
     networks:
       - apsim
 
+  registration-site:
+    image: apsiminitiative/registration-site:latest
+    pull_policy: always
+    container_name: registration-site
+    restart: unless-stopped
+    build:
+      dockerfile: ./registration/Dockerfile
+    profiles:
+      - all
+      - registration2
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+      - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
+      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    networks:
+      - apsim
+
+  registration-db:
+    image: mariadb:10
+    pull_policy: always
+    container_name: registration-db
+    restart: unless-stopped
+    environment:
+      - MARIADB_AUTO_UPGRADE=true
+    profiles:
+      - all
+      - registration2
+      - registration2-db
+    volumes:
+      - /data/registration/db:/var/lib/mysql
+    networks:
+      - apsim
+
 volumes:
   tsdb:
   mongodata:
