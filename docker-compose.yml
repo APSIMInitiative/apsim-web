@@ -1,6 +1,26 @@
 # Top level docker compose
 
 services:
+  httpd:
+    image: httpd:apsim
+    pull_policy: always
+    container_name: httpd
+    restart: unless-stopped
+    build:
+      context: ./httpd
+      dockerfile: ./Dockerfile
+    profiles:
+      - dev
+      - all
+      - httpd
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - APACHE_LOG_DIR=/usr/local/apache2/logs
+    networks:
+      - apsim
+
   apsim-builds:
     image: apsiminitiative/apsim-builds:latest
     pull_policy: never
@@ -49,26 +69,6 @@ services:
     networks:
       - apsim
 
-  httpd:
-    image: httpd:apsim
-    pull_policy: always
-    container_name: httpd
-    restart: unless-stopped
-    build:
-      context: ./httpd
-      dockerfile: ./Dockerfile
-    profiles:
-      - dev
-      - all
-      - httpd
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      - APACHE_LOG_DIR=/usr/local/apache2/logs
-    networks:
-      - apsim
-
   postats2-portal:
     image: apsiminitiative/postats2-portal:latest
     pull_policy: always
@@ -106,46 +106,6 @@ services:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
     volumes:
       - /data/postats2/db:/var/lib/mysql
-    networks:
-      - apsim
-
-  postats-dev-portal:
-    image: apsiminitiative/postats-dev-portal:latest
-    pull_policy: always
-    container_name: postats-dev-portal
-    restart: unless-stopped
-    profiles:
-      - dev
-      - all
-      - postats-dev
-      - postats-dev-portal
-    environment:
-      - PORTAL_DB=${PORTAL_DB}
-      - ACCEPT_PASSWORD=${ACCEPT_PASSWORD}
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - POSTATS_UPLOAD_URL=${POSTATS_UPLOAD_URL}
-      - AZURE_BATCH_ACCOUNT_URL=${AZURE_BATCH_ACCOUNT_URL}
-      - AZURE_BATCH_ACCOUNT_NAME=${AZURE_BATCH_ACCOUNT_NAME}
-      - AZURE_BATCH_ACCOUNT_KEY=${AZURE_BATCH_ACCOUNT_KEY}
-    ports:
-      - 8081:8080
-    networks:
-      - apsim
-
-  postats-dev-db:
-    image: mariadb:10
-    pull_policy: always
-    container_name: postats-dev-db
-    restart: unless-stopped
-    profiles:
-      - dev
-      - all
-      - postats-dev
-      - postats-dev-db
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-    volumes:
-      - /data/postats-dev/db:/var/lib/mysql
     networks:
       - apsim
 
@@ -225,45 +185,43 @@ services:
     networks:
       - apsim
 
-  registration-site:
-    image: apsiminitiative/registration-site:latest
+  ava-api:
+    image: ghcr.io/apsiminitiative/ava-api:latest
     pull_policy: always
-    container_name: registration-site
-    restart: unless-stopped
-    build:
-      dockerfile: ./registration/Dockerfile
+    container_name: ava-api
+    env_file:
+      - .env
     profiles:
-      - all
-      - registration2
+      - ava
     environment:
-      - APACHE_LOG_DIR=/usr/local/apache2/logs
-      - REGO_DB_CONNECT_STRING=${REGO_DB_CONNECT_STRING}
-      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN}
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-    networks:
-      - apsim
-
-  registration-db:
-    image: mariadb:10
-    pull_policy: always
-    container_name: registration-db
-    restart: unless-stopped
-    environment:
-      - MARIADB_AUTO_UPGRADE=true
-    profiles:
-      - all
-      - registration2
-      - registration2-db
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__RegistrationDb: Data Source=/app/data/Ava.db
+    ports:
+      - "8090:80"
     volumes:
-      - /data/registration/db:/var/lib/mysql
+      - ${AVA_SYSTEM_DB_PATH}:/app/data
+    restart: unless-stopped
     networks:
       - apsim
 
-volumes:
-  tsdb:
-  mongodata:
-  api:
-  registration_api_db:
+  ava-webapp:
+    image: ghcr.io/apsiminitiative/ava-webapp:latest
+    pull_policy: always
+    container_name: ava-webapp
+    env_file:
+      - .env
+    profiles:
+      - ava
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      WebApi__BaseUrl: http://ava-api/
+    ports:
+      - "8091:80"
+    depends_on:
+      - ava-api
+    restart: unless-stopped
+    networks:
+      - apsim
 
 networks:
   apsim:
