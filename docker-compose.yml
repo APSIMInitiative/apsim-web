@@ -204,10 +204,10 @@ services:
     networks:
       - apsim
 
-  ava-webapp:
-    image: ghcr.io/apsiminitiative/ava-webapp:latest
+  ava-site:
+    image: ghcr.io/apsiminitiative/ava-site:latest
     pull_policy: always
-    container_name: ava-webapp
+    container_name: ava-site
     env_file:
       - .env
     profiles:
